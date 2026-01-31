@@ -4,6 +4,7 @@ on:
   workflow_run: # workflow_run is a event that is triggered when a workflow is completed, so when our workflow in the next line is completed (we define in types property), this workflow will be triggered
     workflows: ["Sample React CI Pipeline / Workflow"] # workflows is a list of workflows that will trigger this workflow (this is the name of the workflow that will trigger this workflow i.e. we created in ci.yml)
     types: [completed] # types is a list of types that will trigger this workflow
+    workflow_dispatch: # this is a event that is triggered when a workflow is dispatched manually, so we can manually trigger the workflow
 
 jobs:
   deploy:
