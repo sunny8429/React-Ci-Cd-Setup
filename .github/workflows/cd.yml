@@ -1,0 +1,32 @@
+name: CD Pipeline
+
+on:
+  workflow_run: # workflow_run is a event that is triggered when a workflow is completed, so when our workflow in the next line is completed (we define in types property), this workflow will be triggered
+    workflows: ["Sample React CI Pipeline / Workflow"] # workflows is a list of workflows that will trigger this workflow (this is the name of the workflow that will trigger this workflow i.e. we created in ci.yml)
+    types: [completed] # types is a list of types that will trigger this workflow
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production # this is the environment that we want to deploy to, and it will be used to deploy the application to the production environment
+
+    steps:
+      - name: Setup Node js # this will install the node js on the runner machine
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      
+      - name: "Setup vercel cli" # this will install the vercel cli on the runner machine
+        run: npm install -g vercel
+
+      - name: Download artifact # this will download the artifact that we uploaded in the ci.yml workflow
+        uses: actions/download-artifact@v4
+        with:
+          name: build # this is the name of the artifact that we uploaded in the ci.yml workflow, and we want to download it here
+          run-id: ${{ github.workflow_run.id }} # this is the run id of the workflow that we want to download the artifact from, so we can use the run id to download the artifact from the workflow run
+          github-token: ${{ secrets.GITHUB_TOKEN }} # this is the github token that we need to use to download the artifact from the workflow run
+
+      - name: Deploy to Vercel
+        run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --confirm --name=cicdproject-react-app # this will deploy the application to vercel, and the --prod flag will deploy the application to the production environment, and the --token flag will use the token that we have in the environment variables
+
+

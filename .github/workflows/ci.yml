@@ -35,3 +35,9 @@ jobs:
       - name: Build the application
         run: npm run build
 
+      - name: Upload product-ready build files # this will take the dist folder and upload it on a common place in the form of an artifact
+        uses: actions/upload-artifact@v4
+        with:
+           name: build  # This is the name of the artifact that will be created which contain all files from the dist folder
+           path: dist
+
