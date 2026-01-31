@@ -4,7 +4,7 @@ on:
   workflow_run: # workflow_run is a event that is triggered when a workflow is completed, so when our workflow in the next line is completed (we define in types property), this workflow will be triggered
     workflows: ["Sample React CI Pipeline / Workflow"] # workflows is a list of workflows that will trigger this workflow (this is the name of the workflow that will trigger this workflow i.e. we created in ci.yml)
     types: [completed] # types is a list of types that will trigger this workflow
-    workflow_dispatch: # this is a event that is triggered when a workflow is dispatched manually, so we can manually trigger the workflow
+  workflow_dispatch: # this is a event that is triggered when a workflow is dispatched manually, so we can manually trigger the workflow
 
 jobs:
   deploy:
@@ -24,7 +24,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build # this is the name of the artifact that we uploaded in the ci.yml workflow, and we want to download it here
-          run-id: ${{ github.workflow_run.id }} # this is the run id of the workflow that we want to download the artifact from, so we can use the run id to download the artifact from the workflow run
+          run-id: ${{ github.event.workflow_run.id }} # this is the run id of the workflow that we want to download the artifact from, so we can use the run id to download the artifact from the workflow run
           github-token: ${{ secrets.GITHUB_TOKEN }} # this is the github token that we need to use to download the artifact from the workflow run
 
       - name: Deploy to Vercel
