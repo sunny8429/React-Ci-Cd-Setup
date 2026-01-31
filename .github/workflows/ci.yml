@@ -16,4 +16,9 @@ jobs:
 
       - name: Check Node JS Version
         run: node --version
+
+      - name: Clone the repository
+        uses: actions/checkout@v4 # this will fetch the repository code to the runner machine
       
+      - name: Install dependencies
+        run: npm install
